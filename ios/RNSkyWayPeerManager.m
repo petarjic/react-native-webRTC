@@ -26,11 +26,12 @@
 
 
 RCT_EXPORT_METHOD(create:(nonnull NSString *)peerId
-                  options:(NSDictionary *)options)
+                  options:(NSDictionary *)options
+                  constraints:(NSDictionary *)constraints)
 {
     NSLog(@"RNSkyWayPeerManager create");
     
-    RNSkyWayPeer *peer = [[RNSkyWayPeer alloc] initWithPeerId:peerId options:options];
+    RNSkyWayPeer *peer = [[RNSkyWayPeer alloc] initWithPeerId:peerId options:options constraints:constraints];
     self.peers[peerId] = peer;
     [peer addDelegate:self];
 }
@@ -83,7 +84,7 @@ RCT_EXPORT_METHOD(hangup:(nonnull NSString *)peerId)
 }
 
 
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE(SkyWayPeerManager);
 
 - (dispatch_queue_t)methodQueue
 {
@@ -92,43 +93,43 @@ RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents {
     return @[
-             @"RNSkyWayPeerOpen",
-             @"RNSkyWayPeerCall",
-             @"RNSkyWayPeerClose",
-             @"RNSkyWayPeerDisconnected",
-             @"RNSkyWayPeerError",
-             @"RNSkyWayMediaConnection",
-             @"RNSkyWayPeerStatusChange",
-             @"RNSkyWayMediaConnectionStatusChange"
+             @"SkyWayPeerOpen",
+             @"SkyWayPeerCall",
+             @"SkyWayPeerClose",
+             @"SkyWayPeerDisconnected",
+             @"SkyWayPeerError",
+             @"SkyWayMediaConnection",
+             @"SkyWayPeerStatusChange",
+             @"SkyWayMediaConnectionStatusChange"
              ];
 }
 
--(void)onOpen:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayPeerOpen" body:@{@"peer": @{@"id": peer.peer.identity}}];
+-(void)onPeerOpen:(RNSkyWayPeer *)peer {
+    [self sendEventWithName:@"SkyWayPeerOpen" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
--(void)onCall:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayPeerCall" body:@{@"peer": @{@"id": peer.peer.identity}}];
+-(void)onPeerCall:(RNSkyWayPeer *)peer {
+    [self sendEventWithName:@"SkyWayPeerCall" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
--(void)onClose:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayPeerClose" body:@{@"peer": @{@"id": peer.peer.identity}}];
+-(void)onPeerClose:(RNSkyWayPeer *)peer {
+    [self sendEventWithName:@"SkyWayPeerClose" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
--(void)onDisconnected:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayPeerDisconnected" body:@{@"peer": @{@"id": peer.peer.identity}}];
+-(void)onPeerDisconnected:(RNSkyWayPeer *)peer {
+    [self sendEventWithName:@"SkyWayPeerDisconnected" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
--(void)onError:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayPeerError" body:@{@"peer": @{@"id": peer.peer.identity}}];
+-(void)onPeerError:(RNSkyWayPeer *)peer {
+    [self sendEventWithName:@"SkyWayPeerError" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
 -(void)onMediaConnection:(RNSkyWayPeer *)peer {
-    [self sendEventWithName:@"RNSkyWayMediaConnection" body:@{@"peer": @{@"id": peer.peer.identity}}];
+    [self sendEventWithName:@"SkyWayMediaConnection" body:@{@"peer": @{@"id": peer.peer.identity}}];
 }
 
 -(void)onPeerStatusChange:(RNSkyWayPeer *)peer {
     NSNumber *status = [NSNumber numberWithInt: peer.peerStatus];
-    [self sendEventWithName:@"RNSkyWayPeerStatusChange" body:@{@"peer": @{@"id": peer.peer.identity}, @"status": status}];
+    [self sendEventWithName:@"SkyWayPeerStatusChange" body:@{@"peer": @{@"id": peer.peer.identity}, @"status": status}];
 }
 -(void)onMediaConnectionStatusChange:(RNSkyWayPeer *)peer {
     NSNumber *status = [NSNumber numberWithInt: peer.mediaConnectionStatus];
-    [self sendEventWithName:@"RNSkyWayMediaConnectionStatusChange" body:@{@"peer": @{@"id": peer.peer.identity}, @"status": status}];
+    [self sendEventWithName:@"SkyWayMediaConnectionStatusChange" body:@{@"peer": @{@"id": peer.peer.identity}, @"status": status}];
 }
 
 
